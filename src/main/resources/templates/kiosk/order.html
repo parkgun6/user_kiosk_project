@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Cake Template">
+    <meta name="keywords" content="Cake, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cake | Template</title>
+
+    <!-- Google Font -->
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap}"
+          rel="stylesheet">
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap}"
+          rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/flaticon.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/barfiller.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/elegant-icons.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/nice-select.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/slicknav.min.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+</head>
+
+<body>
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="breadcrumb__text">
+                    <h2>KIOSK</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Blog Section Begin -->
+<section class="blog spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10">
+                <section class="shop spad">
+                    <div class="container">
+                        <div class="row">
+                            <div th:each="dto : ${result.dtoList}" class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="product__item" th:each="image : ${dto.imageDTOList}">
+                                    <div class="product__item__pic set-bg" th:onclick="choice([[${dto}]])"
+                                         th:data-setbg="|/view?fileName=${image.link}|">
+                                        </th>
+                                        <div class="product__label">
+                                            <span>MENU</span>
+                                        </div>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <h6><a href="#">[[${dto.name}]]</a></h6>
+                                        <div class="product__item__price">[[${dto.price}]] ₩</div>
+                                        <div class="cart_add">
+                                            <a href="#">Add to cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </th>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-2">
+                <div class="blog__sidebar">
+                    <div class="blog__sidebar__item">
+                        <h5>장바구니</h5>
+
+                        <div class="blog__sidebar__recent basket">
+
+                        </div>
+                    </div>
+                    <div class="blog__sidebar__item" style="padding: 0px">
+                        <h5>TOTAL PRICE</h5>
+                        <div class="blog__sidebar__item__categories">
+                            <ul>
+                                <li><a>Total <span>36,000 원</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button type="submit" class="site-btn">결제하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<!-- Blog Section End -->
+
+<!-- Js Plugins -->
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+<script th:src="@{/js/jquery.barfiller.js}"></script>
+<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/js/jquery.slicknav.js}"></script>
+<script th:src="@{/js/owl.carousel.min.js}"></script>
+<script th:src="@{/js/jquery.nicescroll.min.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+
+
+</body>
+
+<script th:inline="javascript">
+
+    const dqs = document.querySelector.bind(document);
+    const basket = dqs(".basket");
+    console.log(basket)
+
+    function choice(dto){
+        //console.log("aaa");
+        //console.log(dto);
+        //console.log(dto.mno);
+
+        const name = dto.name;
+        const price = dto.price;
+        //console.log(name)
+
+        let str = "";
+
+        str += '<div class=\"blog__sidebar__item__categories\">'
+        str += '    <ul>'
+        str += '        <li><a>'+name+'<span>'+price+' 원</span></a></li>'
+        str += '    </ul>'
+        str += '</div>'
+
+        basket.innerHTML += str;
+    }
+
+</script>
+
+</html>

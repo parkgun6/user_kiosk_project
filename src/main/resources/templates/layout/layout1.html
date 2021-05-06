@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="setMain(main)">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="header">
+    <h1>Header</h1>
+</div>
+<hr/>
+<div class="main">
+    <h1>Main</h1>
+    <th:block th:replace = "${main}"></th:block>
+</div>
+<hr/>
+<div class="footer">
+    <h1>Footer</h1>
+</div>
+
+</body>
+
+</th:block>
+</html>
