@@ -25,6 +25,7 @@
     <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/slicknav.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+
 </head>
 
 <body>
@@ -52,7 +53,7 @@
                         <div class="row">
                             <div th:each="dto : ${result.dtoList}" class="col-lg-3 col-md-6 col-sm-6">
                                 <div class="product__item" th:each="image : ${dto.imageDTOList}">
-                                    <div class="product__item__pic set-bg" th:onclick="choice([[${dto}]])"
+                                    <div class="product__item__pic set-bg" th:onclick="pick([[${dto}]])"
                                          th:data-setbg="|/view?fileName=${image.link}|">
                                         </th>
                                         <div class="product__label">
@@ -77,9 +78,7 @@
                 <div class="blog__sidebar">
                     <div class="blog__sidebar__item">
                         <h5>장바구니</h5>
-
                         <div class="blog__sidebar__recent basket">
-
                         </div>
                     </div>
                     <div class="blog__sidebar__item" style="padding: 0px">
@@ -98,6 +97,70 @@
     </div>
 </section>
 <!-- Blog Section End -->
+<style>
+
+    @media screen and (min-width: 768px) {
+        .modal:before {
+            display: inline-block;
+            vertical-align: middle;
+            content: " ";
+            height: 100%;
+        }
+    }
+    .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+        max-width: 900px
+    }
+</style>
+
+<div class="bottom">
+    <button class="btn btn-default btn-ico" data-toggle="modal" data-target="#myModal">
+        자세히보기
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="product__details__img">
+                            <div class="product__details__big__img">
+                            </div>
+                            <div class="product__details__thumb">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="product__details__text">
+                            <div class="product__label">Menu Info</div>
+                            <div class="menuInfo">
+                            </div>
+                            <div class="product__details__option">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="text" value="1">
+                                    </div>
+                                </div>
+                                <div class="addCartBtn">
+                                <button class="heart__btn"><span class="icon_heart_alt"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Js Plugins -->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -109,20 +172,85 @@
 <script th:src="@{/js/owl.carousel.min.js}"></script>
 <script th:src="@{/js/jquery.nicescroll.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 
 <script th:inline="javascript">
 
     const dqs = document.querySelector.bind(document);
+
     const basket = dqs(".basket");
     console.log(basket)
 
-    function choice(dto){
-        //console.log("aaa");
-        //console.log(dto);
-        //console.log(dto.mno);
+    const menuInfo = dqs(".menuInfo");
+    console.log(menuInfo)
+
+    const menuImage = dqs(".product__details__big__img")
+    console.log(menuImage)
+
+    const addCartBtn = dqs(".addCartBtn")
+    console.log(addCartBtn)
+
+    var productModal = $("#myModal");
+
+
+    function pick(dto){
+
+        const mno = dto.mno;
+        console.log(mno)
+
+        axios.get('/kiosk/'+mno+'/menu').then(res => {
+            // console.log(res);
+            console.log(res.data);
+            //const menuDTO = JSON.stringify(res.data);
+            const menuDTO = JSON.stringify(res.data);
+            console.log(menuDTO);
+            // console.log(res.data.name);
+            // res.data.imageDTOList.forEach(image => {
+            //     console.log(image.uuid)
+            //     console.log(image.fileName)
+            //     console.log(image.link)
+            // });
+
+            //menuInfo.innerHTML = "";
+            //menuImage.innerHTML = "";
+            let str = ""
+
+            str += '<h4>'+res.data.name+'</h4>'
+            str += '<h5>'+res.data.price+' ₩</h5>'
+            str += '<p>'+res.data.explanation+'</p>'
+            str += '<ul>'
+            str += '    <li>SKU: <span>17</span></li>'
+            str += '    <li>Tags: <span>Gadgets, minimalisstic</span></li>'
+            str += '    <li>Category: <span>Biscuit cake</span></li>'
+            str += '</ul>'
+
+            menuInfo.innerHTML = str;
+
+            let imageStr = "";
+
+            res.data.imageDTOList.forEach(image => {
+                console.log(image.link)
+                imageStr += '<img class="big_img" src="/view?fileName='+image.link+'" alt="">'
+
+                menuImage.innerHTML = imageStr;
+            })
+
+            let btnStr = ""
+
+            btnStr += '<button onclick=choice('+menuDTO+') class="primary-btn">Add to cart</button>'
+
+            addCartBtn.innerHTML = btnStr
+        })
+
+        $("#myModal").modal('show');
+    }
+
+
+    function choice(dto) {
+        console.log("aaa");
+        console.log(dto);
+        console.log(dto.mno);
 
         const name = dto.name;
         const price = dto.price;
@@ -132,7 +260,7 @@
 
         str += '<div class=\"blog__sidebar__item__categories\">'
         str += '    <ul>'
-        str += '        <li><a>'+name+'<span>'+price+' 원</span></a></li>'
+        str += '        <li><a>' + name + '<span>' + price + ' 원</span></a></li>'
         str += '    </ul>'
         str += '</div>'
 
