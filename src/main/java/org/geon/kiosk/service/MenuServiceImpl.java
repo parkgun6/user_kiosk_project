@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -49,7 +50,19 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<Object[]> getMenuWithAll(Long mno) {
-        return null;
+    public MenuDTO getMenu(Long mno) {
+
+        List<Object[]> result = menuRepository.getMenuWithAll(mno);
+
+        Menu menu = (Menu) result.get(0)[0];
+
+        List<MenuImage> menuImageList = new ArrayList<>();
+
+        result.forEach(arr -> {
+            MenuImage menuImage = (MenuImage) result.get(0)[1];
+            menuImageList.add(menuImage);
+        });
+
+        return entitiesToDTO(menu, menuImageList);
     }
 }

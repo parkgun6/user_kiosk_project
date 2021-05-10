@@ -17,12 +17,12 @@ public interface MenuService {
 
     PageResultDTO<MenuDTO,Object[]> getListPage(Long sno, PageRequestDTO pageRequestDTO);
 
-    List<Object[]> getMenuWithAll(@Param("mno")Long mno);
+    MenuDTO getMenu(Long mno);
 
     default MenuDTO entitiesToDTO(Menu menu, List<MenuImage> menuImages){
         MenuDTO menuDTO = MenuDTO.builder()
                 .mno(menu.getMno())
-                .sno(menu.getMno())
+                .sno(menu.getSno())
                 .name(menu.getName())
                 .explanation(menu.getExplanation())
                 .price(menu.getPrice())
