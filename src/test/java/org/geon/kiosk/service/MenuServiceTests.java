@@ -29,4 +29,11 @@ public class MenuServiceTests {
         });
     }
 
+    @Test
+    public void testGetMenu(){
+        Long mno = 52L;
+        log.info(menuService.getMenu(mno));
+
+    }
+
 }
