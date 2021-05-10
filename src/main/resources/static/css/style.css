@@ -97,6 +97,16 @@ a:focus {
   color: #ffffff;
 }
 
+button.heart__btn {
+  font-size: 20px;
+  border: 1px solid #e1e1e1;
+  display: inline-block;
+  color: #f08632;
+  padding: 14px;
+  line-height: 16px;
+  background-color: white;
+}
+
 ul,
 ol {
   padding: 0;
@@ -160,6 +170,7 @@ ol {
   color: #ffffff;
   background: #f08632;
   letter-spacing: 2px;
+  border: none;
 }
 
 .site-btn {
@@ -1291,7 +1302,7 @@ ol {
   Breadcrumb
 -----------------------*/
 .breadcrumb-option {
-  padding-top: 60px;
+  padding-top: 120px;
 }
 
 .breadcrumb__text h2 {
