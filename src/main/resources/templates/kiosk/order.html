@@ -26,6 +26,25 @@
     <link rel="stylesheet" th:href="@{/css/slicknav.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
 
+    <style>
+
+        @media screen and (min-width: 768px) {
+            .modal:before {
+                display: inline-block;
+                vertical-align: middle;
+                content: " ";
+                height: 100%;
+            }
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+            max-width: 900px
+        }
+    </style>
+
 </head>
 
 <body>
@@ -84,12 +103,14 @@
                     <div class="blog__sidebar__item" style="padding: 0px">
                         <h5>TOTAL PRICE</h5>
                         <div class="blog__sidebar__item__categories">
-                            <ul>
-                                <li><a>Total <span>36,000 원</span></a></li>
+                            <ul class="totalPrice">
+                                <li><a>Total <span>0 원</span></a></li>
                             </ul>
                         </div>
                     </div>
-                    <button type="submit" class="site-btn">결제하기</button>
+                    <form class="actionForm">
+                        <button type="submit" class="site-btn order-btn">결제하기</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -97,29 +118,7 @@
     </div>
 </section>
 <!-- Blog Section End -->
-<style>
 
-    @media screen and (min-width: 768px) {
-        .modal:before {
-            display: inline-block;
-            vertical-align: middle;
-            content: " ";
-            height: 100%;
-        }
-    }
-    .modal-dialog {
-        display: inline-block;
-        text-align: left;
-        vertical-align: middle;
-        max-width: 900px
-    }
-</style>
-
-<div class="bottom">
-    <button class="btn btn-default btn-ico" data-toggle="modal" data-target="#myModal">
-        자세히보기
-    </button>
-</div>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -146,11 +145,11 @@
                             <div class="product__details__option">
                                 <div class="quantity">
                                     <div class="pro-qty">
-                                        <input type="text" value="1">
+                                        <input type="text" name="qty" value="1">
                                     </div>
                                 </div>
                                 <div class="addCartBtn">
-                                <button class="heart__btn"><span class="icon_heart_alt"></span></button>
+                                    <button class="heart__btn"><span class="icon_heart_alt"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -177,6 +176,10 @@
 
 <script th:inline="javascript">
 
+    const dtoList = [[${result.dtoList}]];
+    console.log(dtoList)
+
+
     const dqs = document.querySelector.bind(document);
 
     const basket = dqs(".basket");
@@ -191,18 +194,30 @@
     const addCartBtn = dqs(".addCartBtn")
     console.log(addCartBtn)
 
-    var productModal = $("#myModal");
+    const totalPrice = dqs(".totalPrice")
+    console.log(totalPrice)
+
+    const actionForm = dqs(".actionForm")
+    console.log(actionForm)
+
+    const productModal = $("#myModal");
 
 
-    function pick(dto){
+    function pick(dto) {
 
         const mno = dto.mno;
         console.log(mno)
 
-        axios.get('/kiosk/'+mno+'/menu').then(res => {
+        axios.get('/kiosk/' + mno + '/menu').then(res => {
             // console.log(res);
             console.log(res.data);
             //const menuDTO = JSON.stringify(res.data);
+
+            // const sno = res.data.sno;
+            // const name = res.data.name;
+            // const price = res.data.price;
+            // const data = {mno, sno, name, price}
+
             const menuDTO = JSON.stringify(res.data);
             console.log(menuDTO);
             // console.log(res.data.name);
@@ -216,13 +231,13 @@
             //menuImage.innerHTML = "";
             let str = ""
 
-            str += '<h4>'+res.data.name+'</h4>'
-            str += '<h5>'+res.data.price+' ₩</h5>'
-            str += '<p>'+res.data.explanation+'</p>'
+            str += '<h4>' + res.data.name + '</h4>'
+            str += '<h5>' + res.data.price + ' ₩</h5>'
+            str += '<p>' + res.data.explanation + '</p>'
             str += '<ul>'
-            str += '    <li>SKU: <span>17</span></li>'
-            str += '    <li>Tags: <span>Gadgets, minimalisstic</span></li>'
-            str += '    <li>Category: <span>Biscuit cake</span></li>'
+            //str += '    <li>SKU: <span>17</span></li>'
+            //str += '    <li>Tags: <span>Gadgets, minimalisstic</span></li>'
+            //str += '    <li>Category: <span>Biscuit cake</span></li>'
             str += '</ul>'
 
             menuInfo.innerHTML = str;
@@ -231,14 +246,14 @@
 
             res.data.imageDTOList.forEach(image => {
                 console.log(image.link)
-                imageStr += '<img class="big_img" src="/view?fileName='+image.link+'" alt="">'
+                imageStr += '<img class="big_img" src="/view?fileName=' + image.link + '" alt="">'
 
                 menuImage.innerHTML = imageStr;
             })
 
             let btnStr = ""
 
-            btnStr += '<button onclick=choice('+menuDTO+') class="primary-btn">Add to cart</button>'
+            btnStr += '<button onclick=choice(' + mno + ') class="primary-btn">Add to cart</button>'
 
             addCartBtn.innerHTML = btnStr
         })
@@ -246,14 +261,36 @@
         $("#myModal").modal('show');
     }
 
+    //주문총액
+    let orderPrice = parseInt(0);
 
-    function choice(dto) {
+    //주문목록
+    const orderList = [];
+
+    function choice(mno) {
         console.log("aaa");
-        console.log(dto);
-        console.log(dto.mno);
+        console.log(mno);
 
-        const name = dto.name;
-        const price = dto.price;
+        const qty = dqs("input[name='qty']").value
+        console.log(qty)
+
+        orderList.push({mno, qty});
+        console.log(orderList)
+
+        //console.log(dtoList[0].mno);
+
+        let name = "";
+        let price = parseInt(0);
+
+        for (let i = 0; i < dtoList.length; i++) {
+            console.log()
+            if (dtoList[i].mno === mno) {
+                console.log(dtoList[i].mno + "---------------------");
+                name = dtoList[i].name
+                price = dtoList[i].price * qty
+            }
+        }
+
         //console.log(name)
 
         let str = "";
@@ -265,7 +302,30 @@
         str += '</div>'
 
         basket.innerHTML += str;
+
+        //주문총액
+        orderPrice += price
+
+        total = '<li><a>Total <span>' + parseInt(orderPrice) + ' 원</span></a></li>'
+
+        //주문총액
+        console.log(orderPrice)
+        totalPrice.innerHTML = total
+
+        $("#myModal").modal('hide');
     }
+
+    dqs(".order-btn").addEventListener("click", function () {
+        console.log("orderBtn");
+        orderList.push(orderPrice)
+        console.log(orderList)
+
+        actionForm.innerHTML += '<input type="text" name="orderList" value='+orderList+'>'
+
+        actionForm.setAttribute("action","/kiosk/payment")
+        actionForm.submit();
+
+    }, false)
 
 </script>
 
