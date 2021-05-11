@@ -108,9 +108,7 @@
                             </ul>
                         </div>
                     </div>
-                    <form class="actionForm">
-                        <button type="submit" class="site-btn order-btn">결제하기</button>
-                    </form>
+                    <button type="submit" class="site-btn order-btn">결제하기</button>
                 </div>
             </div>
         </div>
@@ -176,11 +174,10 @@
 
 <script th:inline="javascript">
 
+    const dqs = document.querySelector.bind(document);
+
     const dtoList = [[${result.dtoList}]];
     console.log(dtoList)
-
-
-    const dqs = document.querySelector.bind(document);
 
     const basket = dqs(".basket");
     console.log(basket)
@@ -197,12 +194,60 @@
     const totalPrice = dqs(".totalPrice")
     console.log(totalPrice)
 
-    const actionForm = dqs(".actionForm")
-    console.log(actionForm)
-
-    const productModal = $("#myModal");
 
 
+    // const actionForm = dqs(".actionForm")
+    // console.log(actionForm)
+
+    //const productModal = $("#myModal");
+
+
+    //주문총액
+    let orderPrice = parseInt(0);
+
+    //주문목록
+    const output = localStorage.getItem("orderList");
+
+    let orderList = JSON.parse(output)
+    console.log(orderList)
+
+    if (orderList == null) {
+        console.log("orderList empty")
+        orderList = []
+    }
+
+
+    //------------------------------------------------------------------
+    //-------------------------장바구니 렌더링----------------------------
+    //------------------------------------------------------------------
+    function orderRender() {
+        if(orderList == null){
+            return;
+        }
+        for (let i = 0; i < orderList.length; i++) {
+            //장바구니 추가-----------------------------------------------------
+            name = orderList[i].name
+            qty = orderList[i].qty
+            price = orderList[i].price * qty
+            orderPrice += price
+            let str = ""
+            str += '<div class=\"blog__sidebar__item__categories\">'
+            str += '    <ul>'
+            str += '        <li><a>' + name + qty + '<span>' + price + ' 원</span></a></li>'
+            str += '    </ul>'
+            str += '</div>'
+            basket.innerHTML += str
+            //총액추가----------------------------------------------------------
+            total = ""
+            total = '<li><a>Total <span>' + parseInt(orderPrice) + ' 원</span></a></li>'
+            totalPrice.innerHTML = total
+        }
+    }orderRender()
+
+
+    //------------------------------------------------------------------
+    //----------------------------메뉴픽업-------------------------------
+    //------------------------------------------------------------------
     function pick(dto) {
 
         const mno = dto.mno;
@@ -217,7 +262,6 @@
             // const name = res.data.name;
             // const price = res.data.price;
             // const data = {mno, sno, name, price}
-
             const menuDTO = JSON.stringify(res.data);
             console.log(menuDTO);
             // console.log(res.data.name);
@@ -261,69 +305,88 @@
         $("#myModal").modal('show');
     }
 
-    //주문총액
-    let orderPrice = parseInt(0);
-
-    //주문목록
-    const orderList = [];
-
+    //------------------------------------------------------------------
+    //-------------------------장바구니 추가------------------------------
+    //------------------------------------------------------------------
     function choice(mno) {
-        console.log("aaa");
+        //console.log("aaa");
         console.log(mno);
 
         const qty = dqs("input[name='qty']").value
         console.log(qty)
 
-        orderList.push({mno, qty});
-        console.log(orderList)
+        //고른 수량이 0일경우 리턴
+        if (qty == 0) {
+            $("#myModal").modal('hide');
+            return;
+        }
 
         //console.log(dtoList[0].mno);
-
         let name = "";
         let price = parseInt(0);
 
         for (let i = 0; i < dtoList.length; i++) {
-            console.log()
             if (dtoList[i].mno === mno) {
                 console.log(dtoList[i].mno + "---------------------");
+                console.log(dtoList[i].imageDTOList[0].link)
+
+                imageLink = dtoList[i].imageDTOList[0].link
                 name = dtoList[i].name
                 price = dtoList[i].price * qty
+                menuPrice = dtoList[i].price
+
+                orderList.push({name, qty, price, menuPrice, imageLink});
+                console.log(orderList)
             }
         }
 
         //console.log(name)
 
-        let str = "";
-
+        let str = ""
         str += '<div class=\"blog__sidebar__item__categories\">'
         str += '    <ul>'
-        str += '        <li><a>' + name + '<span>' + price + ' 원</span></a></li>'
+        str += '        <li><a>' + name + qty + '<span>' + price + ' 원</span></a></li>'
         str += '    </ul>'
         str += '</div>'
-
-        basket.innerHTML += str;
+        basket.innerHTML += str
 
         //주문총액
         orderPrice += price
 
+        total = ""
         total = '<li><a>Total <span>' + parseInt(orderPrice) + ' 원</span></a></li>'
-
-        //주문총액
-        console.log(orderPrice)
         totalPrice.innerHTML = total
+
+
 
         $("#myModal").modal('hide');
     }
 
+
+    //------------------------------------------------------------------
+    //-------------------------결제로 이동-------------------------------
+    //------------------------------------------------------------------
     dqs(".order-btn").addEventListener("click", function () {
-        console.log("orderBtn");
-        orderList.push(orderPrice)
+
+
+
         console.log(orderList)
+        if (orderList.length === 0) {
+            alert("장바구니가 비었습니다")
+            return;
+        }
 
-        actionForm.innerHTML += '<input type="text" name="orderList" value='+orderList+'>'
+        const storeName = {store: [[${store}]]}
+        console.log(storeName)
+        //배열 첫번째(가게이름), 마지막에(총액) 추가
+        orderList.unshift(storeName)
+        orderList.push(orderPrice)
 
-        actionForm.setAttribute("action","/kiosk/payment")
-        actionForm.submit();
+        //console.log(orderList)
+
+        localStorage.setItem("orderList", JSON.stringify(orderList));
+
+        location.href = '/kiosk/payment'
 
     }, false)
 

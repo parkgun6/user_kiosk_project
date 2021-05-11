@@ -10,9 +10,9 @@
     <title>Cake | Template</title>
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap}"
           rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap}"
           rel="stylesheet">
 
     <!-- Css Styles -->
@@ -40,12 +40,6 @@
                     <h2>Shopping cart</h2>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="breadcrumb__links">
-                    <a href="./index.html">Home</a>
-                    <span>Shopping cart</span>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -66,116 +60,21 @@
                             <th></th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td class="product__cart__item">
-                                <div class="product__cart__item__pic">
-                                    <img src="img/shop/cart/cart-1.jpg" alt="">
-                                </div>
-                                <div class="product__cart__item__text">
-                                    <h6>T-shirt Contrast Pocket</h6>
-                                    <h5>$98.49</h5>
-                                </div>
-                            </td>
-                            <td class="quantity__item">
-                                <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="cart__price">$ 30.00</td>
-                            <td class="cart__close"><span class="icon_close"></span></td>
-                        </tr>
-                        <tr>
-                            <td class="product__cart__item">
-                                <div class="product__cart__item__pic">
-                                    <img src="img/shop/cart/cart-2.jpg" alt="">
-                                </div>
-                                <div class="product__cart__item__text">
-                                    <h6>Diagonal Textured Cap</h6>
-                                    <h5>$98.49</h5>
-                                </div>
-                            </td>
-                            <td class="quantity__item">
-                                <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="cart__price">$ 32.50</td>
-                            <td class="cart__close"><span class="icon_close"></span></td>
-                        </tr>
-                        <tr>
-                            <td class="product__cart__item">
-                                <div class="product__cart__item__pic">
-                                    <img src="img/shop/cart/cart-3.jpg" alt="">
-                                </div>
-                                <div class="product__cart__item__text">
-                                    <h6>Basic Flowing Scarf</h6>
-                                    <h5>$98.49</h5>
-                                </div>
-                            </td>
-                            <td class="quantity__item">
-                                <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="cart__price">$ 47.00</td>
-                            <td class="cart__close"><span class="icon_close"></span></td>
-                        </tr>
-                        <tr>
-                            <td class="product__cart__item">
-                                <div class="product__cart__item__pic">
-                                    <img src="img/shop/cart/cart-4.jpg" alt="">
-                                </div>
-                                <div class="product__cart__item__text">
-                                    <h6>Basic Flowing Scarf</h6>
-                                    <h5>$98.49</h5>
-                                </div>
-                            </td>
-                            <td class="quantity__item">
-                                <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="cart__price">$ 30.00</td>
-                            <td class="cart__close"><span class="icon_close"></span></td>
-                        </tr>
+                        <tbody class="order-list">
                         </tbody>
                     </table>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn">
-                            <a href="#">Continue Shopping</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn update__btn">
-                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="col-lg-4">
-                <div class="cart__discount">
-                    <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Coupon code">
-                        <button type="submit">Apply</button>
-                    </form>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="continue__btn">
+                        <a href="#" onclick="continueShopping()">Continue Shopping</a>
+                    </div>
                 </div>
                 <div class="cart__total">
                     <h6>Cart total</h6>
-                    <ul>
-                        <li>Subtotal <span>$ 169.50</span></li>
-                        <li>Total <span>$ 169.50</span></li>
+                    <ul class="totalUl">
+                        <li>Total <span>₩ 0</span></li>
                     </ul>
                     <a href="#" class="primary-btn">Proceed to checkout</a>
                 </div>
@@ -197,6 +96,143 @@
 <script th:src="@{/js/jquery.nicescroll.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!------------------------------------파이어베이스------------------------------------------>
+<!-- Page Heading -->
+<script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+<script th:src="@{/js/firebaseConfig.js}"></script>
+
+
 </body>
 
+
+<script th:inline="javascript">
+
+    const dqs = document.querySelector.bind(document);
+
+    const orderDiv = dqs(".order-list")
+    console.log(orderDiv)
+
+    const totalUl = dqs(".totalUl")
+    console.log(totalUl)
+
+
+    const output = localStorage.getItem("orderList");
+
+    const orderList = JSON.parse(output)
+    console.log(orderList)
+
+    const totalPrice = orderList[orderList.length - 1]
+    console.log("totalPrice: " + totalPrice)
+
+    //---------------------------------------------------------------------------
+    //---------------------------쇼핑계속하기-------------------------------------
+    //---------------------------------------------------------------------------
+    function continueShopping(){
+        //돌아갈때 배열 첫번째와 마지막에 값 제거
+        orderList.shift()
+        orderList.pop()
+        //제거된 값을 로컬스토리지에 저장
+        localStorage.setItem("orderList", JSON.stringify(orderList))
+        history.go(-1)
+
+    }
+
+    const order = []
+    //첫번째 배열과 마지막 배열 제외한 메뉴만 반환
+    for (let i = 1; i < orderList.length - 1; i++) {
+
+        const name = orderList[i].name
+        const qty = orderList[i].qty
+        const price = orderList[i].price
+        const imageLink = orderList[i].imageLink
+        const menuPrice = orderList[i].menuPrice
+        console.log(imageLink)
+        console.log("name: " + name + " , qty: " + qty + " , price: " + price)
+
+        //파이어베이스에 들어간다.
+
+        order.push({menu:name, quantity:qty})
+
+        str = ""
+
+        str += '<tr>\n' +
+            '<td class="product__cart__item">\n' +
+            '<div class="product__cart__item__pic">\n' +
+            '<img src="/view?fileName=' + imageLink + '" style="width:100px;height:100px;border-radius:25px;" alt="">\n' +
+            '</div>\n' +
+            '<div class="product__cart__item__text">\n' +
+            '<h6>' + name + '</h6>\n' +
+            '<h5> ₩ ' + menuPrice + '</h5>\n' +
+            '</div>\n' +
+            '</td>\n' +
+            '<td class="quantity__item">\n' +
+            '<div class="quantity">\n' +
+
+            '<div class="pro-qty">\n' +
+            '<span class="dec qtybtn">-</span>\n' +
+            '<input type="text" value="' + qty + '">\n' +
+            '<span class="inc qtybtn">+</span>\n' +
+            '</div>\n' +
+            '</div>\n' +
+            '</td>\n' +
+            '<td class="cart__price"> ₩ ' + price + '</td>\n' +
+            '<td class="cart__close"><span class="icon_close"></span></td>\n' +
+            '</tr>'
+
+        orderDiv.innerHTML += str
+
+        totalLi = "";
+
+        totalLi += '<li class="totalLi">Total <span>₩ '+totalPrice+'</span></li>'
+
+        console.log(totalLi)
+
+        totalUl.innerHTML = totalLi
+    }
+
+    //---------------------------------------------------------------------------
+    //------------------------파이어베이스 주문내역 추가----------------------------
+    //---------------------------------------------------------------------------
+    function addOrder(){
+        //가게이름
+        const store = orderList[0].store
+        console.log(store)
+
+
+        db.collection("Tests").add({
+            store: store,
+            order: order,
+            orderNum:parseInt(Math.random()*100),
+            orderState: 'new',
+            time: new Date()
+        })
+            .then(docRef => {
+                //console.log("Document written with ID: ", docRef.id);
+                //test = docRef.id;
+                //console.log(test)
+                console.log("-----------------------------------------------")
+                alert("주문이 완료되었습니다. 감사합니다.")
+                localStorage.clear()
+                location.href = "/kiosk/1/order"
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+    }
+
+
+    dqs(".primary-btn").addEventListener("click",function(){
+        //---------------파이어 베이스 연결 테스트------------------
+        // db.collection("Tests").limit(10).get().then(res => {
+        //     res.forEach(result => console.log(result.data()))
+        // })
+
+        addOrder()
+    },false)
+
+
+</script>
 </html>
