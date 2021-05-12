@@ -22,5 +22,4 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
             "left join MenuImage mi on mi.menu = m " +
             "where m.sno = :sno" )
     Page<Object[]> getListPage(Long sno, Pageable pageable);
-
 }

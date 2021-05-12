@@ -32,7 +32,6 @@ public class MenuRepositoryTests {
     @Test
     public void insertAttach() {
 
-
         Menu menu = Menu.builder()
                 .name("Menu...")
                 .sno(1L)
@@ -79,4 +78,5 @@ public class MenuRepositoryTests {
             log.info(Arrays.toString(arr));
         });
     }
+
 }
