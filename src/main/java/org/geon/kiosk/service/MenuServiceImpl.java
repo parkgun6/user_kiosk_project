@@ -5,10 +5,12 @@ import lombok.extern.log4j.Log4j2;
 import org.geon.kiosk.dto.MenuDTO;
 import org.geon.kiosk.dto.PageRequestDTO;
 import org.geon.kiosk.dto.PageResultDTO;
+import org.geon.kiosk.dto.StoreDTO;
 import org.geon.kiosk.entity.Menu;
 import org.geon.kiosk.entity.MenuImage;
 import org.geon.kiosk.repository.MenuImageRepository;
 import org.geon.kiosk.repository.MenuRepository;
+import org.geon.kiosk.repository.StoreRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,6 +29,8 @@ public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
 
     private final MenuImageRepository attachRepository;
+
+    private final StoreRepository storeRepository;
 
     @Override
     public PageResultDTO<MenuDTO, Object[]> getListPage(Long sno, PageRequestDTO pageRequestDTO) {
@@ -64,5 +68,11 @@ public class MenuServiceImpl implements MenuService {
         });
 
         return entitiesToDTO(menu, menuImageList);
+    }
+
+    @Override
+    public String getStoreName(Long sno) {
+        String sname = storeRepository.getStoreName(sno);
+        return sname;
     }
 }

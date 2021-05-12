@@ -36,4 +36,10 @@ public class MenuServiceTests {
 
     }
 
+    @Test
+    public void getStoreName(){
+        Long sno = 1L;
+        log.info(menuService.getStoreName(sno));
+    }
+
 }
