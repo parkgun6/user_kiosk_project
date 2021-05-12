@@ -34,4 +34,6 @@ public class MenuDTO {
 
     private LocalDateTime modDate;
 
+    private String sname;
+
 }

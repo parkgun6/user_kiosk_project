@@ -9,7 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(exclude = "store")
 @Table(name = "tbl_menu")
 public class Menu {
 
@@ -30,4 +30,7 @@ public class Menu {
     @Column(name = "price")
     private int price;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="SNO")
+    private Store store;
 }
