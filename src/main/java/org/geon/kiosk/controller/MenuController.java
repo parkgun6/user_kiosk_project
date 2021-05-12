@@ -28,7 +28,7 @@ public class MenuController {
         log.info("list---------------------------------------");
 
         model.addAttribute("result", service.getListPage(sno, pageRequestDTO));
-
+        model.addAttribute("store", service.getStoreName(sno));
         return "/kiosk/order";
     }
 
