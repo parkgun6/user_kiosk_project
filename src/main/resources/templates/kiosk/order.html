@@ -158,6 +158,20 @@
     </div>
 </div>
 
+<div class="modal fade warningModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-bottom: 700px;">
+        <div class="modal-content" style="width:300px">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="product__details__text" style="margin-left: 15px">
+                    <h4>장바구니가 비었습니다.</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Js Plugins -->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
@@ -193,7 +207,6 @@
 
     const totalPrice = dqs(".totalPrice")
     console.log(totalPrice)
-
 
 
     // const actionForm = dqs(".actionForm")
@@ -314,7 +327,9 @@
 
         const qty = dqs("input[name='qty']").value
         console.log(qty)
-
+        const qtyDiv = dqs(".pro-qty")
+        qtyDiv.removeChild(dqs("input[name='qty']"))
+        qtyDiv += '<input type="text" name="qty" value="1">'
         //고른 수량이 0일경우 리턴
         if (qty == 0) {
             $("#myModal").modal('hide');
@@ -360,6 +375,7 @@
 
 
         $("#myModal").modal('hide');
+
     }
 
 
@@ -372,7 +388,8 @@
 
         console.log(orderList)
         if (orderList.length === 0) {
-            alert("장바구니가 비었습니다")
+            $(".warningModal").modal('show')
+            setTimeout(function(){$(".warningModal").modal('hide');}, 1500);
             return;
         }
 
